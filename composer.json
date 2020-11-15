@@ -18,10 +18,7 @@
         }
     },
     "require": {
-        "php": "^7.2",
-        "chiron/config": "^1.4",
-        "chiron/console": "^0.9",
-        "chiron/container": "^3.5"
+        "php": "^7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",
