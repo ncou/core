@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Chiron\Core\Facade;
 
-use Chiron\Container\Container;
-use RuntimeException;
-
 //https://github.com/lizhichao/one/blob/master/src/Facades/Facade.php
 
 /**

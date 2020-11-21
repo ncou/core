@@ -10,6 +10,7 @@ use Chiron\Config\ConfigLoader;
 use Chiron\Config\Exception\ConfigException;
 use Chiron\Container\SingletonInterface;
 use Chiron\Filesystem\Filesystem;
+use SplFileInfo;
 
 //https://github.com/cakephp/cakephp/blob/master/src/Core/Configure.php
 
@@ -137,7 +138,7 @@ final class Configure implements SingletonInterface
      * @return string
      */
     //https://github.com/limingxinleo/x-phalcon-config-center/blob/master/src/Config/Center/Client.php#L40
-    private function generateSectionName(\SplFileInfo $file, string $path): string
+    private function generateSectionName(SplFileInfo $file, string $path): string
     {
         $directory = $file->getPath();
         $extension = '.' . $file->getExtension();
@@ -173,10 +174,12 @@ final class Configure implements SingletonInterface
     //https://github.com/hiqdev/composer-config-plugin/blob/master/src/utils/Helper.php#L27
     private function recursiveMerge($origin, $appender)
     {
-        if (is_array($origin)
+        if (
+            is_array($origin)
             && array_values($origin) !== $origin
             && is_array($appender)
-            && array_values($appender) !== $appender) {
+            && array_values($appender) !== $appender
+        ) {
             foreach ($appender as $key => $value) {
                 if (isset($origin[$key])) {
                     $origin[$key] = $this->recursiveMerge($origin[$key], $value);

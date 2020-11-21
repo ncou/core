@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Chiron\Core\Container\Provider;
 
 use Chiron\Container\BindingInterface;
-use Chiron\Container\Container;
 
 abstract class AbstractServiceProvider implements ServiceProviderInterface
 {
-    /** @var array */
     protected const BINDINGS = [];
-    /** @var array */
     protected const SINGLETONS = [];
-    /** @var array */
     protected const ALIASES = [];
 
     // TODO : réfléchir si on stocke le container dans une variable de classe (cad si on ajoute à cette classe la variable $this->container en protected).

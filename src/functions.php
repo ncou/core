@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use Chiron\Config\ConfigInterface;
+use Chiron\Container\Container;
+use Chiron\Container\FactoryInterface;
 use Chiron\Core\Configure;
 use Chiron\Core\Directories;
 use Chiron\Core\Environment;
-use Chiron\Config\ConfigInterface;
-use Chiron\Container\Container;
-use Psr\Container\ContainerExceptionInterface;
-use Chiron\Container\FactoryInterface;
 use Chiron\Core\Exception\ScopeException;
+use Psr\Container\ContainerExceptionInterface;
 
 //https://github.com/laravel/framework/blob/43bea00fd27c76c01fd009e46725a54885f4d2a5/src/Illuminate/Foundation/helpers.php#L645
 
@@ -61,8 +61,9 @@ if (! function_exists('resolve')) {
     /**
      * Resolve a className from the container.
      *
-     * @param  string  $className
+     * @param  string $className
      * @param  array  $arguments
+     *
      * @return mixed
      */
     function resolve(string $className, array $arguments = [])
@@ -124,7 +125,6 @@ if (! function_exists('setting')) {
      * Get the specified value in the settings config.
      *
      * @param string $key
-     * @param mixed  $default
      *
      * @return mixed
      */
