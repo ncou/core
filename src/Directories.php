@@ -50,6 +50,7 @@ final class Directories implements SingletonInterface
     {
         foreach ($paths as $alias => $path) {
             if (! is_string($alias)) {
+                // TODO : utiliser la classe DirectoryException !!!!
                 throw new InvalidArgumentException(sprintf('Method "%s()" expects an associative array.', __METHOD__));
             }
             $this->set($alias, $path);
@@ -119,6 +120,7 @@ final class Directories implements SingletonInterface
         $root = $pos === false ? $alias : substr($alias, 0, $pos);
 
         if (! isset($this->aliases[$root])) {
+            // TODO : utiliser la classe DirectoryException !!!!
             throw new InvalidArgumentException(sprintf('Invalid directory path alias "%s".', $root));
         }
         // use method get() to resolve chained aliases.

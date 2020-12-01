@@ -88,6 +88,7 @@ final class Environment implements SingletonInterface
         foreach ($values as $name => $value) {
             if (! is_string($name)) {
                 // TODO : transformer cette exception en une classe d'erreur générique qui prendrait en paramétre uniquement le nom de maéthode (InvalidParameterException par exemple)
+                // TODO : utiliser la classe EnvironmentException !!!!
                 throw new InvalidArgumentException(sprintf('Method "%s()" expects an associative array.', __METHOD__));
             }
             $this->set($name, $value);
@@ -103,6 +104,7 @@ final class Environment implements SingletonInterface
     {
         // empty name value is not logical !
         if ($name === '') {
+            // TODO : utiliser la classe EnvironmentException !!!!
             throw new InvalidArgumentException('Environment names must be a non empty string.');
         }
 
@@ -118,6 +120,7 @@ final class Environment implements SingletonInterface
      *
      * @return mixed
      */
+    // TODO : regarder ici si cela peut servir !!!! => https://github.com/viserio/dotenv-bridge/blob/master/Env.php#L124
     private static function normalize($value)
     {
         if (! is_string($value)) {
