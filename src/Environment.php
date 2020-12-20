@@ -99,7 +99,6 @@ final class Environment implements SingletonInterface
      * @param string $name
      * @param mixed  $value
      */
-    // TODO : lever une erreur si $name est une chaine vide.
     public function set(string $name, $value): void
     {
         // empty name value is not logical !
@@ -121,25 +120,39 @@ final class Environment implements SingletonInterface
      * @return mixed
      */
     // TODO : regarder ici si cela peut servir !!!! => https://github.com/viserio/dotenv-bridge/blob/master/Env.php#L124
+    // TODO : exemple en javascript : https://github.com/sindresorhus/yn/blob/master/index.js#L14
+    // TODO : ajouter pour true => 'y' / 'yes' / '1' / 'on'
+    // TODO : ajouter pour false => 'n' / 'no' / '0' / 'off'
+    // TODO : il faudrait même ajouter pour le true : 'ok' et pour le false : 'ko'
+    // TODO : virer la vérification avec les parenthéses !!!! style '(empty)' ou '(true)'
+    // TODO : BOOLEAN_TRUE_STRINGS= ('true', 'on', 'ok', 'y', 'yes', '1')
     private static function normalize($value)
     {
         if (! is_string($value)) {
             return $value;
         }
 
+        if (is_numeric($value)) {
+            return $value + 0;
+        }
+
+        if (preg_match('/^base64:/', $value) === 1) {
+            return base64_decode(substr($value, 7), true);
+        }
+
         switch (strtolower($value)) {
-            case 'empty':
-            case '(empty)':
-                return '';
             case 'true':
-            case '(true)':
+            case 'yes':
+            case 'on':
                 return true;
             case 'false':
-            case '(false)':
+            case 'no':
+            case 'off':
                 return false;
             case 'null':
-            case '(null)':
                 return null;
+            case 'empty':
+                return '';
         }
 
         // strip starting & ending quotes (single or double)
