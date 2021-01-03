@@ -8,6 +8,7 @@ use Chiron\Injector\Injector;
 use Closure;
 use Psr\Container\ContainerInterface;
 
+// TODO : Lever une BootException si la méthode 'boot()' n'est pas implémentée dans la classe mére. Attention à la visibilité, soit on choisi du public (mais dans ce cas le fromCallable ne sert à rein !!!!) soit du private/protected.
 abstract class AbstractBootloader implements BootloaderInterface
 {
     // TODO : stocker le container dans une variable protected de la classe ce qui permettrait d'y accéder via un $this->container. Voir meême créer une méthode getContainer. Faire la même chose pour le invoker ? si on souhaite par exemple executer un sous executable de la classe par exemple la méthode boot() pourrait executer la méthode bootA() et ensuite bootB() en cascade.
