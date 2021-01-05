@@ -17,6 +17,7 @@ https://github.com/contributte/console/blob/master/src/CommandLoader/ContainerCo
  */
 // TODO : créer une méthode set($key, $value) pour ajouter une command à la liste $this->commandMap, et virer le parametre $commandMap du container, ou alors l'initialiser pas défaut à []
 // TODO : passer la classe en final et virer les protected !!!!!
+// TODO : il faudrait faire un implements SingletonInterface !!!!
 class CommandLoader implements CommandLoaderInterface
 {
     /** @var ContainerInterface */
