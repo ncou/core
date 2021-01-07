@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chiron\Core\Bootloader;
 
 use Chiron\Core\Container\Bootloader\AbstractBootloader;
-use Chiron\Core\Console\Config\ConsoleConfig;
+use Chiron\Core\Config\ConsoleConfig;
 use Chiron\Console\Console;
 
 // TODO : virer cette classe et la remplacer par un ServiceProvider qui se chargerai de faire la m^me chose que ce code ci dessous !!!!!

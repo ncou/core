@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chiron\Core\Console\Config;
+namespace Chiron\Core\Config;
 
 use Chiron\Config\AbstractInjectableConfig;
 use Chiron\Framework;
