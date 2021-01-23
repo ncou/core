@@ -103,6 +103,7 @@ if (! function_exists('env')) {
     }
 }
 
+// TODO : créer plutot une méthode configure() qui récupére directement l'object Configure::class !!!!
 if (! function_exists('configure')) {
     /**
      * Get the specified configuration object.
@@ -114,7 +115,6 @@ if (! function_exists('configure')) {
      */
     function configure(string $section, ?string $subset = null): ConfigInterface
     {
-        // TODO : utiliser la facade ????
         return container(Configure::class)->getConfig($section, $subset);
     }
 }

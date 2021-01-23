@@ -53,6 +53,11 @@ final class Configure implements SingletonInterface
         return isset($this->sections[$section]);
     }
 
+    public function getSections(): array
+    {
+        return $this->sections;
+    }
+
     public function getConfig(string $section, ?string $subset = null): ConfigInterface
     {
         if (! $this->hasConfig($section)) {

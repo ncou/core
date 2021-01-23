@@ -38,6 +38,7 @@ abstract class AbstractDispatcher implements DispatcherInterface
      */
     public function dispatch()
     {
+        // TODO : lever une DispatcherException si la méthode "perform" n'existe pas !!!, éventuellement faire un try/catch autour du "call()" pour catcher les InvokerException et les convertir en DispatcherException avec en $previous l'exception d'origine !!!!
         // TODO : utiliser une facade pour accéder à l'objet "Injector" ? cela éviterai d'avoir une méthode __construct() dans cette classe !!!!
         return $this->injector->call(Closure::fromCallable([$this, 'perform']));
     }

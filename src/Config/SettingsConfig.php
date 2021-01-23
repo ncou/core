@@ -21,6 +21,10 @@ final class SettingsConfig extends AbstractInjectableConfig
         // TODO : ajouter un champ "environment" ??? qui contiendrait les veleurs "developement" / "production" par exemple !!!!
         return Expect::structure([
             'debug'     => Expect::boolean()->default(env('APP_DEBUG', false)),
+            // TODO : code temporaire à améliorer !!!!
+            'environment'   => Expect::string()->default('production'),
+            'name'   => Expect::string()->default('CHIRON'),
+
             'charset'   => Expect::string()->assert([Validator::class, 'isCharset'], 'charset')->default(env('APP_ENCODING', 'UTF-8')),
             'locale'    => Expect::string()->assert([Validator::class, 'isLocale'], 'locale')->default(env('APP_DEFAULT_LOCALE', 'en_US')),
             'timezone'  => Expect::string()->assert([Validator::class, 'isTimezone'], 'timezone')->default(env('APP_DEFAULT_TIMEZONE', 'UTC')),
