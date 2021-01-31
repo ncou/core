@@ -10,6 +10,7 @@ use Chiron\Core\Directories;
 use Chiron\Core\Environment;
 use Chiron\Core\Exception\ScopeException;
 use Psr\Container\ContainerExceptionInterface;
+use Chiron\Core\Config\SettingsConfig;
 
 //https://github.com/laravel/framework/blob/43bea00fd27c76c01fd009e46725a54885f4d2a5/src/Illuminate/Foundation/helpers.php#L645
 
@@ -104,7 +105,8 @@ if (! function_exists('env')) {
 }
 
 // TODO : créer plutot une méthode configure() qui récupére directement l'object Configure::class !!!!
-if (! function_exists('configure')) {
+
+//if (! function_exists('configure')) {
     /**
      * Get the specified configuration object.
      *
@@ -113,11 +115,11 @@ if (! function_exists('configure')) {
      *
      * @return \Chiron\Config\ConfigInterface
      */
-    function configure(string $section, ?string $subset = null): ConfigInterface
-    {
-        return container(Configure::class)->getConfig($section, $subset);
-    }
-}
+//    function configure(string $section, ?string $subset = null): ConfigInterface
+//    {
+//        return container(Configure::class)->getConfig($section, $subset);
+//    }
+//}
 
 // TODO : il faudrait plutot aller chercher l'object SettingsConfig dans le container et faire un toArray(), car si il n'y a pas de fichiers settings.php dans le répertoire utilisateur cette fonction ne marchera pas !!! en utilisant la classe SettingsConfig on sécurise l'appel et on aura accés aux valeurs par défaut pour chaque paramétrage de l'appli.
 if (! function_exists('setting')) {
@@ -130,7 +132,7 @@ if (! function_exists('setting')) {
      */
     function setting(string $key)
     {
-        $config = configure('settings');
+        $config = container(SettingsConfig::class);
 
         if (! $config->has($key)) {
             throw new InvalidArgumentException(sprintf('The provided settings key [%s] doesn\'t exists.', $key));
@@ -139,3 +141,26 @@ if (! function_exists('setting')) {
         return $config->get($key);
     }
 }
+
+
+
+/**
+     * Looks for a string from possibilities that is most similar to value, but not the same (for 8-bit encoding).
+     * @param  string[]  $possibilities
+     */
+// TODO : transformer cette fonction en fonction globale => cad virer le static et la renommer en get_suggestion() ou suggestion() ou alors stocker cette méthode dans une classe d'helper nommée Str::class ou Strings::class
+// https://github.com/nette/utils/blob/master/src/Utils/Helpers.php#L59
+/*
+    public static function getSuggestion(array $possibilities, string $value): ?string
+    {
+        $best = null;
+        $min = (strlen($value) / 4 + 1) * 10 + .1;
+        foreach (array_unique($possibilities) as $item) {
+            if ($item !== $value && ($len = levenshtein($item, $value, 10, 11, 10)) < $min) {
+                $min = $len;
+                $best = $item;
+            }
+        }
+        return $best;
+    }
+*/

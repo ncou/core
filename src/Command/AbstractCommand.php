@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chiron\Core\Console;
+namespace Chiron\Core\Command;
 
 use Chiron\Injector\Injector;
 use LogicException;

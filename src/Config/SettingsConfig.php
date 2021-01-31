@@ -9,6 +9,8 @@ use Chiron\Config\Helper\Validator;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 
+// TODO : Exemple d'une classe pour le suivi des Environment  :   https://github.com/NigelGreenway/reactive-slim/blob/af7cbf00effc65b44a050c7ebc41850dd1f255f0/src/ServerEnvironment.php#L5
+
 // TODO : déplacer la partie "Settings" dans le package chiron/core car ca peut être utilisé par un bootloader ou un middleware en dehors  de l'application chiron !!!!
 // TODO : eventuellement renommer tous ce qui touche à "Settings" avec le nom "Core", ex: core.php.dist au lieu de settings.php.dist
 final class SettingsConfig extends AbstractInjectableConfig

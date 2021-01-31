@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chiron\Core\Console;
+namespace Chiron\Core\Command;
 
-use Chiron\Core\Console\AbstractCommand;
+use Chiron\Core\Command\AbstractCommand;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;

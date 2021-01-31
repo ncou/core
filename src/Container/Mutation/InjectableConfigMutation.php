@@ -19,6 +19,8 @@ final class InjectableConfigMutation
 
         $configure = container(Configure::class);
 
+        // TODO : il se passe quoi si le subset n'est pas valide ??? une exception est levée ????
+
         // TODO : utiliser directement la fonction 'configure($section, $subset)' et si la réponse n'est pas null alors faire un setData !!!!
         if ($configure->hasConfig($section)) {
             // the section subset could be empty.
