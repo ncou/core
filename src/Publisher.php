@@ -12,10 +12,16 @@ use Countable;
 use IteratorAggregate;
 use Transversable;
 
+// TODO : ajouter la gestion des tags.
+//https://github.com/laravelista/lumen-vendor-publish/blob/master/src/VendorPublishCommand.php
+//https://github.com/illuminate/support/blob/master/ServiceProvider.php#L370
+
+// TODO : ajouter une méthode pour récupérer la liste des items à publier, un truc du genre getItems(): array   et cela retournera le tableau $this->publishes;
 final class Publisher implements SingletonInterface
 {
     /**
      * The paths that should be published.
+     *
      * @var array
      */
     private $publishes = [];
@@ -30,7 +36,7 @@ final class Publisher implements SingletonInterface
     /**
      * @var bool
      */
-    private $force; // TODO : renommer en $forceCopy
+    private $force; // TODO : renommer en $forceCopy ou $overwrite
 
     /**
      * Create a new command instance.
@@ -42,12 +48,15 @@ final class Publisher implements SingletonInterface
         $this->filesystem = $filesystem;
     }
 
+    // TODO : renommer cette méthode en onCopy(callable $callback)  ???? cela sera plus simple ca reprend le nommage des "événements"
+    // TODO : utiliser plutot une^propriété public de classe $onCopy qui serait un callable et qu'on appellerait à chaque copie de fichier !!!!
     public function setCallback(callable $callback)
     {
         $this->callback = $callback;
     }
 
     // TODO : renommer en addItem() ????
+    // TODO : ajouter un 3eme paramétre pour passer une string $tag
     public function add(string $source, string $destination)
     {
         $source = $this->filesystem->normalizePath($source);
@@ -121,9 +130,41 @@ final class Publisher implements SingletonInterface
         }
     }
 
-
     private function status(string $from, string $to, string $type): void
     {
         call_user_func_array($this->callback, [$from, $to, $type]);
     }
+
+
+
+/*
+// TODO : exemple pour filtrer sur un tag dans un tableau.
+$values[] = ['tag' => 'foo', 'source' => 'source1', 'destination' => 'dest1'];
+$values[] = ['tag' => 'bar', 'source' => 'source2', 'destination' => 'dest1'];
+$values[] = ['tag' => 'foo', 'source' => 'source3', 'destination' => 'dest1'];
+
+// TODO : eventuellement reporter cette méthode sous le nom "where()" dans une classe Arr::class de support.
+function filter($array, callable $callback)
+{
+    return array_filter($array, $callback, ARRAY_FILTER_USE_BOTH);
+}
+
+//https://github.com/antonioribeiro/ia-arr/blob/e0107e68bbce8736f6e19c796a5511b741ced227/src/Support/Traits/EnumeratesValues.php#L538
+function whereIn($array, $key, $values, $strict = false)
+{
+    $values = (array) $values;
+
+    return filter($array, function ($item) use ($key, $values, $strict) {
+        return in_array($item[$key] ?? null, $values, $strict);
+    });
+}
+
+$res = whereIn($values, 'tag', 'foo');
+
+die(var_dump($res));
+*/
+
+
+
+
 }

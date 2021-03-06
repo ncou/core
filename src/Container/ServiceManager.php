@@ -12,6 +12,7 @@ use Chiron\Core\Container\Provider\ServiceProviderInterface;
  * Manages Services living inside the Container.
  */
 // TODO : renommer en ServicesManager au pluriel ???
+// TODO : gérer les doublons lors de l'jout d'un provider ou bootloader, cad stocker dans un tableau (le nom de classe) ce qui est déjà traité.
 final class ServiceManager
 {
     /** @var Container */

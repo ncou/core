@@ -35,6 +35,17 @@ use InvalidArgumentException;
 // TODO : permettre d'utiliser les helpers ArrayAccess pour faire un truc du genre "$directories['config']"
 final class Environment implements SingletonInterface
 {
+    // TODO : utiliser des constantes pour initialiser la valeur dans le fichier de config Settings.environment = Environment::PRODUCTION
+    //https://github.com/opulencephp/Opulence/blob/4254ea09135538252b0919316cb8cef0037841e4/src/Opulence/Environments/Environment.php#L19
+    /** The production environment */
+    //public const PRODUCTION = 'production';
+    /** The staging environment */
+    //public const STAGING = 'staging';
+    /** The testing environment */
+    //public const TESTING = 'testing';
+    /** The development environment */
+    //public const DEVELOPMENT = 'development';
+
     /** @var array */
     private $values = [];
 

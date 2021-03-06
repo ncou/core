@@ -19,6 +19,7 @@
     },
     "require": {
         "php": "^7.2",
+        "chiron/support": "^1.0",
         "chiron/config": "^1.4",
         "chiron/console": "^0.9",
         "chiron/container": "^3.5"
