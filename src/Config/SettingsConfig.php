@@ -22,15 +22,15 @@ final class SettingsConfig extends AbstractInjectableConfig
         // TODO : ajouter un champ "name" qui contiendrait le nom de l'application ??? et éventuellement un champ "version" ????
         // TODO : ajouter un champ "environment" ??? qui contiendrait les veleurs "developement" / "production" par exemple !!!!
         return Expect::structure([
-            'debug'     => Expect::boolean()->default(env('APP_DEBUG', false)),
+            'debug'       => Expect::boolean()->default(env('APP_DEBUG', false)),
             // TODO : code temporaire à améliorer !!!!
-            'environment'   => Expect::string()->default('production'),
-            'name'   => Expect::string()->default('CHIRON'),
+            'environment' => Expect::string()->default('production'),
+            'name'        => Expect::string()->default('CHIRON'),
 
-            'charset'   => Expect::string()->assert([Validator::class, 'isCharset'], 'charset')->default(env('APP_ENCODING', 'UTF-8')),
-            'locale'    => Expect::string()->assert([Validator::class, 'isLocale'], 'locale')->default(env('APP_DEFAULT_LOCALE', 'en_US')),
-            'timezone'  => Expect::string()->assert([Validator::class, 'isTimezone'], 'timezone')->default(env('APP_DEFAULT_TIMEZONE', 'UTC')),
-        ]);
+            'charset'     => Expect::string()->assert([Validator::class, 'isCharset'], 'charset')->default(env('APP_ENCODING', 'UTF-8')),
+            'locale'      => Expect::string()->assert([Validator::class, 'isLocale'], 'locale')->default(env('APP_DEFAULT_LOCALE', 'en_US')),
+            'timezone'    => Expect::string()->assert([Validator::class, 'isTimezone'], 'timezone')->default(env('APP_DEFAULT_TIMEZONE', 'UTC')),
+        ])->otherItems(Expect::mixed()); // TODO : voir si on doit conserver la fonction otherItems !!!! cad si on peut ajouter d'autres balises librement dans le fichier de config des settings !!!!
     }
 
     // TODO : conserver cette méthode (sachant que la méthode isDebug() est mieux !!!!) ????

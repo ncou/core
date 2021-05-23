@@ -12,12 +12,16 @@ use Countable;
 use IteratorAggregate;
 use Transversable;
 
+//https://github.com/top-think/framework/blob/6.0/src/think/console/command/VendorPublish.php#L35
+
 // TODO : ajouter la gestion des tags.
 //https://github.com/laravelista/lumen-vendor-publish/blob/master/src/VendorPublishCommand.php
 //https://github.com/illuminate/support/blob/master/ServiceProvider.php#L370
 
+// TODO : créer un package dédié qui serait nommé chiron/publisher et ajouter dans le fichier composer de core, une dépendance vers ce package chiron/publisher ???? (penser à virer le "implements SingletonInterface" pour éviter une dépendance vers le composant chiron/container)
+
 // TODO : ajouter une méthode pour récupérer la liste des items à publier, un truc du genre getItems(): array   et cela retournera le tableau $this->publishes;
-final class Publisher implements SingletonInterface
+final class Publisher //implements SingletonInterface
 {
     /**
      * The paths that should be published.
@@ -43,13 +47,13 @@ final class Publisher implements SingletonInterface
      *
      * @param Filesystem $files
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct()
     {
-        $this->filesystem = $filesystem;
+        $this->filesystem = new Filesystem();
     }
 
     // TODO : renommer cette méthode en onCopy(callable $callback)  ???? cela sera plus simple ca reprend le nommage des "événements"
-    // TODO : utiliser plutot une^propriété public de classe $onCopy qui serait un callable et qu'on appellerait à chaque copie de fichier !!!!
+    // TODO : utiliser plutot une propriété public de classe $onCopy qui serait un callable et qu'on appellerait à chaque copie de fichier !!!!
     public function setCallback(callable $callback)
     {
         $this->callback = $callback;
@@ -59,6 +63,7 @@ final class Publisher implements SingletonInterface
     // TODO : ajouter un 3eme paramétre pour passer une string $tag
     public function add(string $source, string $destination)
     {
+        // Normalization is applied to have more "understandable" path if there are displayed later.
         $source = $this->filesystem->normalizePath($source);
         $destination = $this->filesystem->normalizePath($destination);
 
@@ -123,6 +128,7 @@ final class Publisher implements SingletonInterface
      *
      * @param string $directory
      */
+    // TODO : utiliser plutot la méthode $filesystem->ensureDirectoryExists() qui a l'air de faire la même chose que cette méthode !!!!
     private function createParentDirectory(string $directory): void
     {
         if (! $this->filesystem->isDirectory($directory)) {
@@ -130,6 +136,7 @@ final class Publisher implements SingletonInterface
         }
     }
 
+    // TODO : attention il faut vérifier si le callback n'est pas null avant de l'executer car on doit pouvoir utiliser cette méthode sans initialiser de callable !!!! ou alors initialiser le callback avec une "fonction anonyme qui ne fait rien" !!!!
     private function status(string $from, string $to, string $type): void
     {
         call_user_func_array($this->callback, [$from, $to, $type]);

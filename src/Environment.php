@@ -28,6 +28,8 @@ use InvalidArgumentException;
 
 //https://github.com/chillerlan/php-dotenv/blob/master/src/DotEnv.php#L144
 
+//https://github.com/spiral/roadrunner-worker/blob/1a10a7641ff045fff2570b5ec1a265713e5a1bd5/src/Environment.php#L84
+
 // TODO : permettre de faire un getIterator sur cette classe, idem pour utiliser un ArrayAccess pour utiliser cette classe comme un tableau !!!!
 // TODO : ajouter dans cette classe une méthode pour vérifier si on est en mode console (cad is_cli) + ajouter cela dans le fichier functions.php
 // TODO : il va falloir que cette classe soit en shared si on souhaite ajouter des key/data dans cette classe sans forcément les ajouter dans $ENV et $SERVER !!!!!
@@ -62,6 +64,17 @@ final class Environment implements SingletonInterface
         $this->values = [];
         $this->add(array_merge($_SERVER, $_ENV, $values));
     }
+
+    /**
+     * @return self
+     */
+    /*
+    public static function fromGlobals(): self
+    {
+        $env = \array_merge($_ENV, $_SERVER);
+
+        return new self($env);
+    }*/
 
     public function all(): array
     {

@@ -178,7 +178,7 @@ final class Directories implements SingletonInterface
      */
     private static function isAlias(string $alias): bool
     {
-        return strncmp($alias, '@', 1) === 0;
+        return strncmp($alias, '@', 1) === 0; // TODO : utiliser la fonction Str::startWith() ca sera plus propre !!!
     }
 
     /**

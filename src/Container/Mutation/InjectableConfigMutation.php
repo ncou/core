@@ -6,11 +6,9 @@ namespace Chiron\Core\Container\Mutation;
 
 use Chiron\Config\InjectableConfigInterface;
 use Chiron\Container\Container;
-use Chiron\Core\Configure;
+use Chiron\Config\Configure;
 
-// TODO : Ne pas utiliser la facade "Configure::class" c'est pas trés propre !!!
-
-// TODO : déplacer cette classe dans le package chiron/config
+// TODO : déplacer cette classe dans le package chiron/config ???
 final class InjectableConfigMutation
 {
     public static function mutation(InjectableConfigInterface $config)
@@ -22,14 +20,14 @@ final class InjectableConfigMutation
         // TODO : il se passe quoi si le subset n'est pas valide ??? une exception est levée ????
 
         // TODO : utiliser directement la fonction 'configure($section, $subset)' et si la réponse n'est pas null alors faire un setData !!!!
-        if ($configure->hasConfig($section)) {
+        if ($configure->exists($section)) {
             // the section subset could be empty.
             $subset = $config->getSectionSubsetName();
             // get the data array for section and subset-section.
-            $data = $configure->getConfigData($section, $subset);
+            $data = $configure->read($section, $subset); // TODO : il faut gérer le subset dans la classe Configure::class !!!!
 
             // inject in the config the configuration file data.
-            // TODO : il faudra peut etre faire un try/catch et transformer l'exception en ApplicationException. Je pense que si on injecte des mauvaises données on aura une exception car le schema sera invalid.
+            // TODO : il faudra peut etre faire un try/catch et transformer l'exception en ApplicationException ou ConfiguratorException. Je pense que si on injecte des mauvaises données on aura une exception car le schema sera invalid !!!!
             $config->setData($data);
         }
     }

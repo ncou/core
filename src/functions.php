@@ -16,6 +16,7 @@ use Chiron\Core\Config\SettingsConfig;
 
 // TODO : ajouter les @throws ScopeException pour les différentes fonctions ci dessous !!!!!
 
+// TODO : virer cette méthode !!!!
 if (! function_exists('di')) {
     /**
      * Return the container instance.
@@ -83,7 +84,6 @@ if (! function_exists('directory')) {
      */
     function directory(string $alias): string
     {
-        // TODO : utiliser la facade ???
         return container(Directories::class)->get($alias);
     }
 }
@@ -99,14 +99,11 @@ if (! function_exists('env')) {
      */
     function env(string $key, $default = null)
     {
-        // TODO : utiliser la facade ???
         return container(Environment::class)->get($key, $default);
     }
 }
 
-// TODO : créer plutot une méthode configure() qui récupére directement l'object Configure::class !!!!
-
-//if (! function_exists('configure')) {
+if (! function_exists('configure')) {
     /**
      * Get the specified configuration object.
      *
@@ -115,13 +112,12 @@ if (! function_exists('env')) {
      *
      * @return \Chiron\Config\ConfigInterface
      */
-//    function configure(string $section, ?string $subset = null): ConfigInterface
-//    {
-//        return container(Configure::class)->getConfig($section, $subset);
-//    }
-//}
+    function configure(string $section, ?string $subset = null): ConfigInterface
+    {
+        return container(Configure::class)->read($section, $subset);
+    }
+}
 
-// TODO : il faudrait plutot aller chercher l'object SettingsConfig dans le container et faire un toArray(), car si il n'y a pas de fichiers settings.php dans le répertoire utilisateur cette fonction ne marchera pas !!! en utilisant la classe SettingsConfig on sécurise l'appel et on aura accés aux valeurs par défaut pour chaque paramétrage de l'appli.
 if (! function_exists('setting')) {
     /**
      * Get the specified value in the settings config.

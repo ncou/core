@@ -7,7 +7,6 @@ namespace Chiron\Core\Command;
 use Chiron\Injector\Injector;
 use LogicException;
 use Psr\Container\ContainerInterface;
-//use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Chiron\Console\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,6 +46,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * @param ContainerInterface $container
      */
+    // TODO : utiliser plutot le trait containerawaretrait !!!! et manipuler un objet Chiron\Container plutot qu'un psr\containerinterface !!!!
     public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
@@ -79,20 +79,16 @@ abstract class AbstractCommand extends BaseCommand
             // TODO : lever une logicexception si la méthode 'perform' n'est pas trouvée dans la classe mére ? (voir même une CommandException)
         // TODO : ajouter un contrôle sur la valeur de retour pour s'assurer que c'est bien un int qui est renvoyé ??? ou alors retourner d'office le code 0 qui indique qu'il n'y a pas eu d'erreurs ????
         // TODO : il faudrait surement faire un try/catch autour de la méthode call, car si la méthode perform n'existe pas une exception sera retournée. Une fois le catch fait il faudra renvoyer une new CommandException($e->getMessage()), pour convertir le type d'exception (penser à mettre le previous exception avec la valeur $e).
-        return (int) $injector->call(Closure::fromCallable([$this, 'perform']));
+        $result = $injector->call(Closure::fromCallable([$this, 'perform']));
 
-        // TODO : exemple de code pour gérer le retour vide ou null ou suppérieur à 255 (qui est la limite, et normalement ce code est réservé à PHP)
-        // https://github.com/cakephp/console/blob/4.x/CommandRunner.php#L174
-        /*
-        if ($result === null || $result === true) {
-            return CommandInterface::CODE_SUCCESS; //0
-        }
         if (is_int($result) && $result >= 0 && $result <= 255) {
             return $result;
         }
+        if ($result === null || $result === true) {
+            return self::SUCCESS;
+        }
 
-        return CommandInterface::CODE_ERROR; //1
-        */
+        return self::FAILURE;
     }
 
 

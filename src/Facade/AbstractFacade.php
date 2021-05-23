@@ -6,6 +6,8 @@ namespace Chiron\Core\Facade;
 
 //https://github.com/lizhichao/one/blob/master/src/Facades/Facade.php
 
+//https://github.com/top-think/framework/blob/6.0/src/think/Facade.php
+
 /**
  * You must override the function "getFacadeAccessor" in your class and return the Container alias key used to retrieve the service.
  */
