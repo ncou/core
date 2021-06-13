@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chiron\Core\Dispatcher;
+namespace Chiron\Core\Engine;
 
 use Chiron\Injector\Injector;
 use Closure;
@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
  * Allow Lazy loads services used as parameters for the 'perform()' function.
  */
 // TODO : sortir le container du constructeur et utiliser le trait ContainerAwareTrait + ContainerAwareInterface, avec une mutation du Container qui injecterai automatiquement le container ????
-abstract class AbstractDispatcher implements DispatcherInterface
+abstract class AbstractEngine implements EngineInterface
 {
     /** @var Injector */
     protected $injector;
@@ -36,7 +36,7 @@ abstract class AbstractDispatcher implements DispatcherInterface
     /**
      * {@inheritdoc}
      */
-    public function dispatch()
+    public function ignite()
     {
         // TODO : lever une DispatcherException si la méthode "perform" n'existe pas !!!, éventuellement faire un try/catch autour du "call()" pour catcher les InvokerException et les convertir en DispatcherException avec en $previous l'exception d'origine !!!!
         // TODO : utiliser une facade pour accéder à l'objet "Injector" ? cela éviterai d'avoir une méthode __construct() dans cette classe !!!!
@@ -46,5 +46,5 @@ abstract class AbstractDispatcher implements DispatcherInterface
     /**
      * {@inheritdoc}
      */
-    abstract public function canDispatch(): bool;
+    abstract public function isActive(): bool;
 }

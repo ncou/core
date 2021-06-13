@@ -22,7 +22,9 @@
         "chiron/support": "^1.0",
         "chiron/config": "^1.4",
         "chiron/console": "^0.9",
-        "chiron/container": "^3.6"
+        "chiron/container": "^3.6",
+        "chiron/event": "^1.0",
+        "chiron/publisher": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

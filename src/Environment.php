@@ -161,7 +161,7 @@ final class Environment implements SingletonInterface
         }
 
         if (preg_match('/^base64:/', $value) === 1) {
-            return base64_decode(substr($value, 7), true);
+            return base64_decode(substr($value, 7), true); // TODO : attention si on ajoute une string en base64 invalide cela va retourner un booléen, il faudrait plutot lever une exception !!!! Voir même utiliser une classe Support\Base64::class qui léverai directement l'erreur si la chaine base64 n'est pas valide !!!!
         }
 
         switch (strtolower($value)) {
