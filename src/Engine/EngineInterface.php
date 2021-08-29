@@ -14,7 +14,7 @@ interface EngineInterface
     public function ignite();
 
     /**
-     * Check if the engine is active for the current context.
+     * Check if the engine is valid given the current context.
      *
      * @return bool
      */

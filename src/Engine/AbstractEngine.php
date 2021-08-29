@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chiron\Core\Engine;
 
-use Chiron\Injector\Injector;
+use Chiron\Injector\InvokerInterface;
 use Closure;
 use Psr\Container\ContainerInterface;
 
@@ -16,21 +16,17 @@ use Psr\Container\ContainerInterface;
 // TODO : sortir le container du constructeur et utiliser le trait ContainerAwareTrait + ContainerAwareInterface, avec une mutation du Container qui injecterai automatiquement le container ????
 abstract class AbstractEngine implements EngineInterface
 {
-    /** @var Injector */
-    protected $injector;
-
-    /** @var ContainerInterface */
-    protected $container;
+    /** @var InvokerInterface */
+    protected $invoker;
 
     /**
-     * @param ContainerInterface $container
+     * @param InvokerInterface $container
      */
     // TODO : il faudrait plutot lui passer en paramétre un InvokerInterface ou une classe Injector::class pour récupérer directement l'injector, car la variable container ne sert à rien !!!!
     // TODO : ou alors lui passer en paramétre un "Container" et donc on pourrait directement effectuer un ->call depuis ce container, plus besoin d'initialiser un Injector !!!!
-    public function __construct(ContainerInterface $container)
+    public function __construct(InvokerInterface $invoker)
     {
-        $this->injector = new Injector($container);
-        $this->container = $container;
+        $this->invoker = $invoker;
     }
 
     /**
@@ -40,7 +36,7 @@ abstract class AbstractEngine implements EngineInterface
     {
         // TODO : lever une DispatcherException si la méthode "perform" n'existe pas !!!, éventuellement faire un try/catch autour du "call()" pour catcher les InvokerException et les convertir en DispatcherException avec en $previous l'exception d'origine !!!!
         // TODO : utiliser une facade pour accéder à l'objet "Injector" ? cela éviterai d'avoir une méthode __construct() dans cette classe !!!!
-        return $this->injector->call(Closure::fromCallable([$this, 'perform']));
+        return $this->invoker->invoke(Closure::fromCallable([$this, 'perform']));
     }
 
     /**

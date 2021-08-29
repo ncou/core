@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Chiron\Core\Container\Bootloader;
 
-use Psr\Container\ContainerInterface;
+use Chiron\Injector\InvokerInterface;
 
 interface BootloaderInterface
 {
-    public function bootload(ContainerInterface $container): void;
+    public function bootload(InvokerInterface $invoker): void;
 }

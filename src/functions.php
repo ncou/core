@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use Chiron\Config\ConfigInterface;
 use Chiron\Container\Container;
-use Chiron\Container\FactoryInterface;
+use Chiron\Injector\FactoryInterface;
 use Chiron\Core\Configure;
 use Chiron\Core\Directories;
 use Chiron\Core\Environment;
 use Chiron\Core\Exception\ScopeException;
 use Psr\Container\ContainerExceptionInterface;
-use Chiron\Core\Config\SettingsConfig;
+use Chiron\Config\SettingsConfig;
 
 //https://github.com/laravel/framework/blob/43bea00fd27c76c01fd009e46725a54885f4d2a5/src/Illuminate/Foundation/helpers.php#L645
 
@@ -70,7 +70,7 @@ if (! function_exists('resolve')) {
      */
     function resolve(string $className, array $arguments = [])
     {
-        return container(FactoryInterface::class)->make($className, $arguments);
+        return container(FactoryInterface::class)->build($className, $arguments);
     }
 }
 
