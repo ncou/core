@@ -18,6 +18,7 @@ https://github.com/contributte/console/blob/master/src/CommandLoader/ContainerCo
 // TODO : créer une méthode set($key, $value) pour ajouter une command à la liste $this->commandMap, et virer le parametre $commandMap du container, ou alors l'initialiser pas défaut à []
 // TODO : passer la classe en final et virer les protected !!!!!
 // TODO : il faudrait faire un implements SingletonInterface !!!!
+// TODO : utiliser plutot cette classe qui fait déjà ce travail : https://github.com/symfony/console/blob/058553870f7809087fa80fa734704a21b9bcaeb2/CommandLoader/ContainerCommandLoader.php       Par contre il faudra surement utiliser un principe de mutation pour injecter automatiquement le container !!!!
 class CommandLoader implements CommandLoaderInterface
 {
     /** @var ContainerInterface */
@@ -26,11 +27,13 @@ class CommandLoader implements CommandLoaderInterface
     /** @var array An array with command names as keys and service ids as values */
     private $commandMap = [];
 
+    // TODO : lui passer plutot un Chiron\Container et non pas un PSR11 ContainerInterface !!!
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    // TODO : renommer en add()
     public function set(string $name, string $command): void
     {
         $this->commandMap[$name] = $command;

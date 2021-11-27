@@ -6,7 +6,7 @@ namespace Chiron\Core\Container\Provider;
 
 use Chiron\Container\BindingInterface;
 
-// TODO : ajouter aussi un 'protected const MUTATIONS = []' et la méthode registerMutetions() qui va bien !!!!
+// TODO : ajouter aussi un 'protected const MUTATIONS = []' et la méthode registerMutations() qui va bien !!!!
 abstract class AbstractServiceProvider implements ServiceProviderInterface
 {
     protected const BINDINGS = [];

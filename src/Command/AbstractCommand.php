@@ -46,7 +46,9 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * @param ContainerInterface $container
      */
-    // TODO : utiliser plutot le trait containerawaretrait !!!! et manipuler un objet Chiron\Container plutot qu'un psr\containerinterface !!!!
+    // TODO : utiliser un InvokerInterface plutot qu'un ContainerInterface dans ce constructeur ????
+    // TODO : utiliser plutot le trait containerawaretrait !!!!
+    // TODO : manipuler un objet Chiron\Container plutot qu'un psr\containerinterface !!!!
     public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
@@ -69,18 +71,19 @@ abstract class AbstractCommand extends BaseCommand
         // TODO : controle à virer une fois qu'on utilisera le trait ContainerAwareTrait car il y a une méthode getContainer (qui léve une exception si le container n'est pas bon) qui fait la même chose
         // TODO : il faudra mettre le getContainer, dans un try catch et convertir le ContainerException qui sera renvoyé en un CommandException avec un code du style : new CommandException($e->getMessage()), pour convertir le type d'exception (penser à mettre le previous exception avec la valeur $e).
         if ($this->container === null) {
-            // TODO : lever une CommandException dans le cas ou on n'a pas appeller la méthode setContainer !!!
-            throw new LogicException('Your forgot to call the setContainer function.');
+            // TODO : lever une CommandException dans le cas ou on n'a pas appeller la méthode setContainer !!! Lever plutot une improperlyconfiguredexception::class ????
+            throw new LogicException('Your forgot to call the setContainer function.'); // TODO : lever une Chiron\Console\Exception\CommandException !!!
         }
 
-        $injector = new Injector($this->container);
+        $injector = new Injector($this->container); // TODO : recuperer le injector directement depuis le container !!!!
 
         // TODO : lever une exception si la méthode 'perform()' n'est pas présente !!!!
-            // TODO : lever une logicexception si la méthode 'perform' n'est pas trouvée dans la classe mére ? (voir même une CommandException)
+        // TODO : lever une logicexception si la méthode 'perform' n'est pas trouvée dans la classe mére ? (voir même une CommandException)
         // TODO : ajouter un contrôle sur la valeur de retour pour s'assurer que c'est bien un int qui est renvoyé ??? ou alors retourner d'office le code 0 qui indique qu'il n'y a pas eu d'erreurs ????
         // TODO : il faudrait surement faire un try/catch autour de la méthode call, car si la méthode perform n'existe pas une exception sera retournée. Une fois le catch fait il faudra renvoyer une new CommandException($e->getMessage()), pour convertir le type d'exception (penser à mettre le previous exception avec la valeur $e).
-        $result = $injector->call(Closure::fromCallable([$this, 'perform']));
+        $result = $injector->invoke(Closure::fromCallable([$this, 'perform']));
 
+        // Try to convert the returned value to something logical.
         if (is_int($result) && $result >= 0 && $result <= 255) {
             return $result;
         }

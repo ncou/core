@@ -16,6 +16,8 @@ abstract class AbstractFacadeProxy
      */
     private function __construct()
     {
+        // TODO : passer le constructeur en public et lever ce type d'exception : throw new \Error('Class ' . static::class . ' is static and cannot be instantiated.');
+        // cf    https://github.com/nette/utils/blob/master/src/StaticClass.php#L24
     }
 
     /**
@@ -28,9 +30,13 @@ abstract class AbstractFacadeProxy
      */
     public static function __callStatic(string $method, array $arguments)
     {
+        // TODO : sécuriser les appels vers les méthodes privées/protected ????
+        // https://github.com/nette/utils/blob/master/src/StaticClass.php#L34
+        // https://github.com/nette/utils/blob/a828903f85bb513e51ba664b44b61f20d812cf20/src/Utils/ObjectHelpers.php#L90
+
         $instance = static::getInstance();
 
-        return $instance->$method(...$arguments);
+        return $instance->$method(...$arguments); // TODO : gérer le cas ou la méthode n'existe pas (et dans ce cas faire une suggestion via levenshtein) ???
     }
 
     // TODO : forcer le type de retour à "object" attention il faut une version minimale de PHP 7.3 pour utiliser cette notation !!!!

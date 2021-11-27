@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chiron\Core;
 
 use Chiron\Container\SingletonInterface;
+use Chiron\Core\Exception\EnvironmentException;
 use InvalidArgumentException;
 
 // TODO : il faudrait surement une méthode pour renvoyer toutes les clés/valeurs du stype "toArray()" ou "all()"
@@ -111,9 +112,7 @@ final class Environment implements SingletonInterface
     {
         foreach ($values as $name => $value) {
             if (! is_string($name)) {
-                // TODO : transformer cette exception en une classe d'erreur générique qui prendrait en paramétre uniquement le nom de maéthode (InvalidParameterException par exemple)
-                // TODO : utiliser la classe EnvironmentException !!!!
-                throw new InvalidArgumentException(sprintf('Method "%s()" expects an associative array.', __METHOD__));
+                throw new EnvironmentException(sprintf('Method "%s()" expects an associative array.', __METHOD__));
             }
             $this->set($name, $value);
         }
@@ -127,8 +126,7 @@ final class Environment implements SingletonInterface
     {
         // empty name value is not logical !
         if ($name === '') {
-            // TODO : utiliser la classe EnvironmentException !!!!
-            throw new InvalidArgumentException('Environment names must be a non empty string.');
+            throw new EnvironmentException('Environment names must be a non empty string.');
         }
 
         $this->values[$name] = self::normalize($value);

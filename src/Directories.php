@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chiron\Core;
 
 use Chiron\Container\SingletonInterface;
+use Chiron\Core\Exception\DirectoryException;
 use InvalidArgumentException;
 
 //https://github.com/swoft-cloud/swoft-framework/blob/master/src/Concern/PathAliasTrait.php
@@ -50,8 +51,7 @@ final class Directories implements SingletonInterface
     {
         foreach ($paths as $alias => $path) {
             if (! is_string($alias)) {
-                // TODO : utiliser la classe DirectoryException !!!!
-                throw new InvalidArgumentException(sprintf('Method "%s()" expects an associative array.', __METHOD__));
+                throw new DirectoryException(sprintf('Method "%s()" expects an associative array.', __METHOD__));
             }
             $this->set($alias, $path);
         }
@@ -120,8 +120,7 @@ final class Directories implements SingletonInterface
         $root = $pos === false ? $alias : substr($alias, 0, $pos);
 
         if (! isset($this->aliases[$root])) {
-            // TODO : utiliser la classe DirectoryException !!!!
-            throw new InvalidArgumentException(sprintf('Invalid directory path alias "%s".', $root));
+            throw new DirectoryException(sprintf('Invalid directory path alias "%s".', $root));
         }
         // use method get() to resolve chained aliases.
         $rootPath = $this->get($this->aliases[$root]);
@@ -244,9 +243,7 @@ final class Directories implements SingletonInterface
     public function get_OLD(string $alias): string
     {
         if (! $this->has($alias)) {
-            // TODO : créer une classe DirectoryException ????
-            // TODO : lever plutot une ApplicationException !!!! + faire un sprintf pour le message
-            throw new InvalidArgumentException("Undefined directory '{$alias}'");
+            throw new DirectoryException("Undefined directory '{$alias}'");
         }
 
         return $this->paths[$alias];
