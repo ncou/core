@@ -11,7 +11,7 @@ interface EngineInterface
      *
      * @return mixed The return value could be an int for the console engine or void for the http engine
      */
-    public function ignite();
+    public function ignite(): mixed;
 
     /**
      * Check if the engine is valid given the current context.

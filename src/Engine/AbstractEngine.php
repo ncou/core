@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 abstract class AbstractEngine implements EngineInterface
 {
     /** @var InvokerInterface */
-    protected $invoker;
+    protected InvokerInterface $invoker;
 
     /**
      * @param InvokerInterface $container
@@ -32,7 +32,7 @@ abstract class AbstractEngine implements EngineInterface
     /**
      * {@inheritdoc}
      */
-    public function ignite()
+    public function ignite(): mixed
     {
         // TODO : lever une DispatcherException si la méthode "perform" n'existe pas !!!, éventuellement faire un try/catch autour du "call()" pour catcher les InvokerException et les convertir en DispatcherException avec en $previous l'exception d'origine !!!!
         // TODO : utiliser une facade pour accéder à l'objet "Injector" ? cela éviterai d'avoir une méthode __construct() dans cette classe !!!!

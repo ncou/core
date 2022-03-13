@@ -35,7 +35,7 @@ abstract class AbstractFacade extends AbstractFacadeProxy
     // TODO : vérifier l'utilité du $forceNew je pense que ca ne sert à rien !!!! ou alors le mettre en variable de classe en protected genre $this->forceNew pour qu'il soit overridé si besoin.
     public static function getInstance(bool $forceNew = false)
     {
-        return container(static::getFacadeAccessor(), $forceNew); // TODO : ameliorer ce code ce n'est pas tres propre, utiliser plutot un ContainerAwareTrait et faire le get !!!
+        return container(static::getFacadeAccessor(), $forceNew); // TODO : ameliorer ce code ce n'est pas tres propre
     }
 
     /**

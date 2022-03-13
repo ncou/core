@@ -4,7 +4,16 @@ declare(strict_types=1);
 
 namespace Chiron\Core\Facade;
 
+use BadMethodCallException;
+use Error;
+
+// TODO : ajouter dans la documentation les annotations possibles notamment @method XXXXX
+// https://doc.nette.org/en/contributing/coding-standard#toc-documentation-blocks-phpdoc
+
 //https://github.com/lizhichao/one/blob/master/src/Facades/Facade.php
+
+// TODO : retrouver les méthodes possibles depuis l'annotation @method cela permettra lors de l'appel à une méthode non trouvée d'afficher un leveinstein avec les méthodes disponibles !!!!!
+// https://github.com/nette/utils/blob/a828903f85bb513e51ba664b44b61f20d812cf20/src/Utils/ObjectHelpers.php#L78
 
 /**
  * You must override the function "getFacadeAccessor" in your class and return the Container alias key used to retrieve the service.
@@ -34,9 +43,12 @@ abstract class AbstractFacadeProxy
         // https://github.com/nette/utils/blob/master/src/StaticClass.php#L34
         // https://github.com/nette/utils/blob/a828903f85bb513e51ba664b44b61f20d812cf20/src/Utils/ObjectHelpers.php#L90
 
+        // https://github.com/laravel/framework/blob/035a0b2e2da129bac2756b1ee3ee10bb8bcda569/src/Illuminate/Support/Traits/ForwardsCalls.php
+        // https://github.com/laravel/framework/blob/035a0b2e2da129bac2756b1ee3ee10bb8bcda569/src/Illuminate/Foundation/Support/Providers/RouteServiceProvider.php#L135
+
         $instance = static::getInstance();
 
-        return $instance->$method(...$arguments); // TODO : gérer le cas ou la méthode n'existe pas (et dans ce cas faire une suggestion via levenshtein) ???
+        return $instance->{$method}(...$arguments); // TODO : gérer le cas ou la méthode n'existe pas (et dans ce cas faire une suggestion via levenshtein) ???
     }
 
     // TODO : forcer le type de retour à "object" attention il faut une version minimale de PHP 7.3 pour utiliser cette notation !!!!
