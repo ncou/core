@@ -11,6 +11,8 @@ use Chiron\Core\Exception\MemoryException;
 use Chiron\Filesystem\Filesystem;
 
 
+// TODO : Nettoyage du cache : https://github.com/composer/composer/blob/5c98a2cf8e3df53172ed34130302a3d362f90631/src/Composer/Cache.php#L274
+
 // TODO : commandes autour du cache :
 //https://github.com/codeigniter4/CodeIgniter4/blob/b7ec33cd5618f2e4d31fbc2df2f95879c8b7e07a/system/Commands/Cache/InfoCache.php
 //https://github.com/codeigniter4/CodeIgniter4/blob/b7ec33cd5618f2e4d31fbc2df2f95879c8b7e07a/system/Commands/Cache/ClearCache.php

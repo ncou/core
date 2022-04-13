@@ -10,7 +10,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
-https://github.com/contributte/console/blob/master/src/CommandLoader/ContainerCommandLoader.php
+use Chiron\Injector\InjectorAwareTrait;
+use Chiron\Injector\InjectorAwareInterface;
+
+use Chiron\Container\SingletonInterface;
+
+use Chiron\Core\Exception\ImproperlyConfiguredException;
+
+use Chiron\Injector\Injector;
+
+// TODO : utiliser l'attribut PHP8 "AsCommand" pour récupérer le nom de la commande. Ca permettra via reflection de préparer la liste des commandes.
+//https://symfony.com/blog/new-in-symfony-5-3-lazy-command-description
+
+//https://github.com/contributte/console/blob/master/src/CommandLoader/ContainerCommandLoader.php
 
 /**
  * Loads commands from a PSR-11 container.
@@ -19,23 +31,38 @@ https://github.com/contributte/console/blob/master/src/CommandLoader/ContainerCo
 // TODO : passer la classe en final et virer les protected !!!!!
 // TODO : il faudrait faire un implements SingletonInterface !!!!
 // TODO : utiliser plutot cette classe qui fait déjà ce travail : https://github.com/symfony/console/blob/058553870f7809087fa80fa734704a21b9bcaeb2/CommandLoader/ContainerCommandLoader.php       Par contre il faudra surement utiliser un principe de mutation pour injecter automatiquement le container !!!!
-class CommandLoader implements CommandLoaderInterface
+// TODO : utiliser un containerawaretrait ?
+// TODO : ajouter un implement SigletonInterface
+class CommandLoader implements CommandLoaderInterface, SingletonInterface
 {
-    /** @var ContainerInterface */
-    private $container;
+    private Injector $injector;
 
-    /** @var array An array with command names as keys and service ids as values */
-    private $commandMap = [];
+    /** @var array<string, class-string> An array with command names as keys and service ids as values */
+    private array $commandMap = [];
 
-    // TODO : lui passer plutot un Chiron\Container et non pas un PSR11 ContainerInterface !!!
-    public function __construct(ContainerInterface $container)
+    public function __construct(Injector $injector)
     {
-        $this->container = $container;
+        $this->injector = $injector;
     }
 
-    // TODO : renommer en add()
-    public function set(string $name, string $command): void
+    // TODO : renommer la méthode en register() + ajouter phpdoc
+    public function set(string $command): void
     {
+        if (! class_exists($command)) {
+            throw new ImproperlyConfiguredException(sprintf('Command class "%s" does not exist.', $command));
+        }
+
+        if (! is_subclass_of($command, Command::class)) {
+            // TODO : mettre plutot un message du type : Instance of XXX espected, received get_type_debug()
+            throw new ImproperlyConfiguredException(sprintf('Command class "%s" does not extends from %s.', $command, Command::class));
+        }
+
+        $name = call_user_func([$command, 'getDefaultName']);
+
+        if ($name === null) {
+            throw new ImproperlyConfiguredException(sprintf('Command default name is not defined in the command "%s".', $command));
+        }
+
         $this->commandMap[$name] = $command;
     }
 
@@ -48,14 +75,8 @@ class CommandLoader implements CommandLoaderInterface
             throw new CommandNotFoundException(sprintf('Command "%s" does not exist.', $name));
         }
 
-        $command = $this->container->get($this->commandMap[$name]);
-
-        // TODO : Faire un test si la classe à un ContainerAwareInterface dans ce cas on injecte le container. Ou alors utiliser une mutation du container pour injecter le container automatiquement ?
-        if ($command instanceof AbstractCommand) {
-            $command->setContainer($this->container);
-        }
-
-        return $command;
+        // TODO : Attention comme on utilise pas un container->get() on n'applique pas les mutations lorsqu'on récupére la commande :-( à voir si ce fonctionnement est voulu.
+        return $this->injector->build($this->commandMap[$name]);
     }
 
     /**
@@ -63,7 +84,7 @@ class CommandLoader implements CommandLoaderInterface
      */
     public function has($name): bool
     {
-        return isset($this->commandMap[$name]) && $this->container->has($this->commandMap[$name]);
+        return isset($this->commandMap[$name]);
     }
 
     /**

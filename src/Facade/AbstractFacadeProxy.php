@@ -37,6 +37,7 @@ abstract class AbstractFacadeProxy
      *
      * @return mixed
      */
+    // TODO : renommer $arguments en $parameters
     public static function __callStatic(string $method, array $arguments)
     {
         // TODO : sécuriser les appels vers les méthodes privées/protected ????
@@ -46,6 +47,8 @@ abstract class AbstractFacadeProxy
         // https://github.com/laravel/framework/blob/035a0b2e2da129bac2756b1ee3ee10bb8bcda569/src/Illuminate/Support/Traits/ForwardsCalls.php
         // https://github.com/laravel/framework/blob/035a0b2e2da129bac2756b1ee3ee10bb8bcda569/src/Illuminate/Foundation/Support/Providers/RouteServiceProvider.php#L135
 
+        //https://github.com/nette/utils/blob/a828903f85bb513e51ba664b44b61f20d812cf20/src/Utils/ObjectHelpers.php#L57
+
         $instance = static::getInstance();
 
         return $instance->{$method}(...$arguments); // TODO : gérer le cas ou la méthode n'existe pas (et dans ce cas faire une suggestion via levenshtein) ???
@@ -53,5 +56,5 @@ abstract class AbstractFacadeProxy
 
     // TODO : forcer le type de retour à "object" attention il faut une version minimale de PHP 7.3 pour utiliser cette notation !!!!
     // TODO : éventuellement faire un check is_object et lever une RuntimeException (ou exception consom si besoin) si le type obtenu depuis le container n'est pas le bon !!!! + ajouter dans la dochead le @throw RuntimeException par exemple.
-    abstract public static function getInstance();
+    abstract public static function getInstance(): object;
 }

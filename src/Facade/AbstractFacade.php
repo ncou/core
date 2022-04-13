@@ -33,7 +33,7 @@ abstract class AbstractFacade extends AbstractFacadeProxy
     // TODO : forcer le type de retour à "object" attention il faut une version minimale de PHP 7.3 pour utiliser cette notation !!!!
     // TODO : éventuellement faire un check is_object et lever une RuntimeException (ou exception consom si besoin) si le type obtenu depuis le container n'est pas le bon !!!! + ajouter dans la dochead le @throw RuntimeException par exemple.
     // TODO : vérifier l'utilité du $forceNew je pense que ca ne sert à rien !!!! ou alors le mettre en variable de classe en protected genre $this->forceNew pour qu'il soit overridé si besoin.
-    public static function getInstance(bool $forceNew = false)
+    public static function getInstance(bool $forceNew = false): object
     {
         return container(static::getFacadeAccessor(), $forceNew); // TODO : ameliorer ce code ce n'est pas tres propre
     }

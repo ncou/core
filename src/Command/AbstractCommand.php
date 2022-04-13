@@ -15,6 +15,11 @@ use Chiron\Console\Traits\OutputHelpersTrait;
 use Chiron\Console\Traits\CallCommandTrait;
 use Closure;
 
+use Chiron\Injector\InjectorAwareTrait;
+use Chiron\Injector\InjectorAwareInterface;
+
+// TODO : eventuellement désactiver la méthode setName() cad lui faire lever une exception si elle est utilisée. Pour s'assurer qu'on récupére le nom de la commande UNIQUEMENT via de la reflection d'attibut ou de variable de classe.
+
 //https://github.com/spiral/console/blob/master/src/Command.php
 //https://github.com/spiral/console/blob/master/src/Traits/HelpersTrait.php
 
@@ -40,25 +45,22 @@ use Closure;
  * Provides automatic command configuration and access to global container scope.
  */
 // TODO : ajouter le containerAwareTrait + ContainerAwareInterface !!!!
-// TODO : on ne peut pas ajouter une fonction abstraite "perform" car le constructeur n'est pas le même selon la classe. Réfléchir cependant à mettre dans cette classe une fonction protected perform qui throw une exception, cela éviterai un check si la méthode existe. Mais voir si cela fonctionne quand la signature de perform définiée dans la classe mére est différente, on risque d'avoir le mêm probléme qu'avec la signature de fonction abstraite !!!
+// TODO : on ne peut pas ajouter une fonction abstraite "perform" car le constructeur n'est pas le même selon la classe. Réfléchir cependant à mettre dans cette classe une fonction protected perform qui throw une exception, cela éviterai un check si la méthode existe. Mais voir si cela fonctionne quand la signature de perform définiée dans la classe mére est différente, on risque d'avoir le même probléme qu'avec la signature de fonction abstraite !!!
 abstract class AbstractCommand extends BaseCommand
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    // TODO : utiliser un InvokerInterface plutot qu'un ContainerInterface dans ce constructeur ????
-    // TODO : utiliser plutot le trait containerawaretrait !!!!
-    // TODO : manipuler un objet Chiron\Container plutot qu'un psr\containerinterface !!!!
-    public function setContainer(ContainerInterface $container): void
+    private Injector $injector;
+
+    public function __construct(Injector $injector)
     {
-        $this->container = $container;
+        parent::__construct(name: null);
+        $this->injector = $injector;
     }
 
     /**
      * Store the input and output object, and 'Perform()' the console command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface   $input
+     * @param OutputInterface $output
      *
      * @return int
      */
@@ -67,21 +69,11 @@ abstract class AbstractCommand extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        // TODO : on devrait plutot faire une vérif sur instanceof ContainerInterface plutot que juste sur "null" pour confirmer que c'est bien un container qui est utilisé !!!
-        // TODO : controle à virer une fois qu'on utilisera le trait ContainerAwareTrait car il y a une méthode getContainer (qui léve une exception si le container n'est pas bon) qui fait la même chose
-        // TODO : il faudra mettre le getContainer, dans un try catch et convertir le ContainerException qui sera renvoyé en un CommandException avec un code du style : new CommandException($e->getMessage()), pour convertir le type d'exception (penser à mettre le previous exception avec la valeur $e).
-        if ($this->container === null) {
-            // TODO : lever une CommandException dans le cas ou on n'a pas appeller la méthode setContainer !!! Lever plutot une improperlyconfiguredexception::class ????
-            throw new LogicException('Your forgot to call the setContainer function.'); // TODO : lever une Chiron\Console\Exception\CommandException !!!
-        }
-
-        $injector = new Injector($this->container); // TODO : recuperer le injector directement depuis le container !!!!
-
         // TODO : lever une exception si la méthode 'perform()' n'est pas présente !!!!
         // TODO : lever une logicexception si la méthode 'perform' n'est pas trouvée dans la classe mére ? (voir même une CommandException)
-        // TODO : ajouter un contrôle sur la valeur de retour pour s'assurer que c'est bien un int qui est renvoyé ??? ou alors retourner d'office le code 0 qui indique qu'il n'y a pas eu d'erreurs ????
+
         // TODO : il faudrait surement faire un try/catch autour de la méthode call, car si la méthode perform n'existe pas une exception sera retournée. Une fois le catch fait il faudra renvoyer une new CommandException($e->getMessage()), pour convertir le type d'exception (penser à mettre le previous exception avec la valeur $e).
-        $result = $injector->invoke(Closure::fromCallable([$this, 'perform']));
+        $result = $this->injector->invoke(Closure::fromCallable([$this, 'perform']));
 
         // Try to convert the returned value to something logical.
         if (is_int($result) && $result >= 0 && $result <= 255) {
@@ -137,3 +129,4 @@ abstract class AbstractCommand extends BaseCommand
         return static::ARGUMENTS;
     }*/
 }
+
