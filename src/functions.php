@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Chiron\Config\ConfigInterface;
 use Chiron\Container\Container;
 use Chiron\Injector\FactoryInterface;
-use Chiron\Core\Configure;
+use Chiron\Config\Configure;
 use Chiron\Core\Directories;
 use Chiron\Core\Environment;
 use Chiron\Core\Exception\ScopeException;
@@ -104,18 +104,19 @@ if (! function_exists('env')) {
 }
 
 // TODO : attention cela risque de ne pas fonctionner si on essaye de lire un fichier de configuration qui n'a pas été publié via le "publisher", il faudrait ajouter une initialisation des champs dans la classe configure pour mettre les valeurs par défaut des config qu'on n'a pas encore copié !!!!
-if (! function_exists('configure')) {
+// TODO : utiliser cette fonction pour splitter la clés via le point "." par exemple pour récupérer une clés du stype 'http.default_charset' => https://github.com/windwalker-io/utilities/blob/master/src/StrNormalize.php#L131
+if (! function_exists('config')) {
     /**
      * Get the specified configuration object.
      *
      * @param string      $section
-     * @param string|null $subset
      *
      * @return \Chiron\Config\ConfigInterface
      */
-    function configure(string $section, ?string $subset = null): ConfigInterface
+    function config(string $section): ConfigInterface
     {
-        return container(Configure::class)->read($section, $subset);
+        $data = container(Configure::class)->read($section);
+        return new \Chiron\Config\Config($data);
     }
 }
 
