@@ -49,8 +49,7 @@ final class Environment implements SingletonInterface
     /** The development environment */
     //public const DEVELOPMENT = 'development';
 
-    /** @var array */
-    private $values = [];
+    private array $values = [];
 
     public function __construct(array $values = [])
     {
@@ -58,6 +57,8 @@ final class Environment implements SingletonInterface
     }
 
     /**
+     * Prepare the environment vars (top priority to $value, followed by $_ENV and last priority $_SERVER)
+     *
      * @param array $values
      */
     public function init(array $values = []): void
